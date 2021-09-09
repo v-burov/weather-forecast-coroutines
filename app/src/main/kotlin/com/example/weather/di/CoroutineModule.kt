@@ -13,22 +13,7 @@ import javax.inject.Named
 internal class CoroutineModule {
 
     @Provides
-    @Named("main")
-    fun provideMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
-
-    @Provides
-    @Named("io")
-    fun provideIODispatcher(): CoroutineDispatcher = Dispatchers.IO
-
-    @Provides
-    @Named("default")
+    @DispatcherDefault
     fun provideComputationDispatcher(): CoroutineDispatcher = Dispatchers.Default
 
-    @Provides
-    @Named("unconfined")
-    fun provideUnconfinedDispatcher(): CoroutineDispatcher = Dispatchers.Unconfined
-
-    @Provides
-    @Named("main_immediate")
-    fun provideMainImmediateDispatcher(): CoroutineDispatcher = Dispatchers.Main.immediate
 }
