@@ -7,7 +7,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 
-//todo check class access modifiers
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
