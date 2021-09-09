@@ -21,6 +21,7 @@ object Version {
     const val kotlinSerializationJson = "1.0.0"
     const val kotlinSerializationConverter = "0.8.0"
     const val swiperefreshlayout = "1.1.0"
+    const val liveEvent = "1.2.3"
 }
 
 android {
@@ -89,4 +90,5 @@ dependencies {
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:${Version.kotlinSerializationConverter}")
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:${Version.swiperefreshlayout}")
+    implementation("com.github.hadilq:live-event:${Version.liveEvent}")
 }

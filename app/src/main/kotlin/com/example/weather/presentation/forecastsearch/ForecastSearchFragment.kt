@@ -27,23 +27,25 @@ internal class ForecastSearchFragment : BaseFragment<FragmentSearchBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.etSearch.requestFocus()
+        with(binding) {
+            etSearch.requestFocus()
 
-        binding.btnLookup.setOnClickListener {
-            val cityName = binding.etSearch.text.toString()
+            btnLookup.setOnClickListener {
+                val cityName = etSearch.text.toString()
 
-            if (cityName.isEmpty()) {
-                Toast.makeText(requireContext(), R.string.search_city_name_empty, Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+                if (cityName.isEmpty()) {
+                    Toast.makeText(requireContext(), R.string.search_city_name_empty, Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                (requireActivity() as AppCompatActivity).supportActionBar?.title = cityName
+
+                hideKeyboard()
+
+                navigateToForecastList(cityName)
+
+                etSearch.text = null
             }
-
-            (requireActivity() as AppCompatActivity).supportActionBar?.title = cityName
-
-            hideKeyboard()
-
-            navigateToForecastList(cityName)
-
-            binding.etSearch.text = null
         }
     }
 

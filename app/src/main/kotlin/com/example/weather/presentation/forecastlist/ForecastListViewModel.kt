@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.weather.base.SingleLiveEvent
 import com.example.weather.domain.ForecastSearchParams
 import com.example.weather.domain.ForecastSearchResult
 import com.example.weather.domain.ForecastSearchUseCase
+import com.hadilq.liveevent.LiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,7 +22,7 @@ internal class ForecastListViewModel @Inject constructor(private val forecastSea
 
     internal val error: LiveData<String>
         get() = _error
-    private val _error: SingleLiveEvent<String> = SingleLiveEvent()
+    private val _error: LiveEvent<String> = LiveEvent()
 
     fun fetchForecast(cityName: String) {
         viewModelScope.launch {

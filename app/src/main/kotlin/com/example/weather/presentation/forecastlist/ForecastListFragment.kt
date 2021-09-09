@@ -36,35 +36,38 @@ internal class ForecastListFragment : BaseFragment<FragmentForecastListBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter = ForecastRecyclerAdapter { onItemClicked(it) }
-        binding.rvForecast.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        binding.rvForecast.adapter = adapter
 
-        binding.swiperefresh.isRefreshing = true
+        with(binding) {
+            rvForecast.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            rvForecast.adapter = adapter
 
-        viewModel.forecasts.observe(viewLifecycleOwner, {
-            adapter.setData(it)
-            binding.swiperefresh.isRefreshing = false
-        })
+            swiperefresh.isRefreshing = true
 
-        viewModel.error.observe(viewLifecycleOwner, {
-            binding.swiperefresh.isRefreshing = false
-            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-        })
+            viewModel.forecasts.observe(viewLifecycleOwner, {
+                adapter.setData(it)
+                swiperefresh.isRefreshing = false
+            })
 
-        cityName = requireArguments().getString(PARAMS_CITY_NAME)
-            ?: throw IllegalStateException("City name cannot be empty")
+            viewModel.error.observe(viewLifecycleOwner, {
+                swiperefresh.isRefreshing = false
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            })
 
-        with(requireActivity() as AppCompatActivity) {
-            setSupportActionBar(binding.toolbar)
-            supportActionBar?.title = cityName
-            setupActionBarWithNavController(NavHostFragment.findNavController(this@ForecastListFragment))
-        }
+            cityName = requireArguments().getString(PARAMS_CITY_NAME)
+                ?: throw IllegalStateException("City name cannot be empty")
 
-        viewModel.fetchForecast(cityName)
+            with(requireActivity() as AppCompatActivity) {
+                setSupportActionBar(toolbar)
+                supportActionBar?.title = cityName
+                setupActionBarWithNavController(NavHostFragment.findNavController(this@ForecastListFragment))
+            }
 
-        binding.swiperefresh.setOnRefreshListener {
             viewModel.fetchForecast(cityName)
+
+            swiperefresh.setOnRefreshListener {
+                viewModel.fetchForecast(cityName)
+            }
         }
     }
 
