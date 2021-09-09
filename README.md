@@ -2,7 +2,7 @@
 
 Architecture: MVVM - Clean
 
-Technology Stack: retrofit, dagger hilt, coroutines, live data
+Stack: Android Architecture Components (ViewModel, LiveData, Navigation, Lifecycle), Retrofit, Dagger Hilt, Coroutines.
 
 Good to improve:
 
