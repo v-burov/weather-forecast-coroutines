@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weather.base.BaseFragment
 import com.example.weather.R
@@ -22,6 +24,8 @@ internal class ForecastListFragment : BaseFragment<FragmentForecastListBinding>(
         private const val PARAMS_DATE = "params_date"
     }
 
+    private lateinit var cityName: String
+
     private val viewModel: ForecastListViewModel by viewModels()
 
     private lateinit var adapter: ForecastRecyclerAdapter
@@ -32,7 +36,8 @@ internal class ForecastListFragment : BaseFragment<FragmentForecastListBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter = ForecastRecyclerAdapter { onItemClicked(it) }
-        binding.rvForecast.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        binding.rvForecast.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.rvForecast.adapter = adapter
 
         binding.swiperefresh.isRefreshing = true
@@ -47,8 +52,14 @@ internal class ForecastListFragment : BaseFragment<FragmentForecastListBinding>(
             Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
         })
 
-        val cityName = requireArguments().getString(PARAMS_CITY_NAME)
+        cityName = requireArguments().getString(PARAMS_CITY_NAME)
             ?: throw IllegalStateException("City name cannot be empty")
+
+        with(requireActivity() as AppCompatActivity) {
+            setSupportActionBar(binding.toolbar)
+            supportActionBar?.title = cityName
+            setupActionBarWithNavController(NavHostFragment.findNavController(this@ForecastListFragment))
+        }
 
         viewModel.fetchForecast(cityName)
 
@@ -60,6 +71,7 @@ internal class ForecastListFragment : BaseFragment<FragmentForecastListBinding>(
     private fun onItemClicked(date: Long) {
         val bundle = Bundle()
         bundle.putLong(PARAMS_DATE, date)
+        bundle.putString(PARAMS_CITY_NAME, cityName)
 
         NavHostFragment.findNavController(this)
             .navigate(R.id.action_forecastListFragment_to_forecastDetailsFragment, bundle)

@@ -47,16 +47,6 @@ internal class ForecastSearchFragment : BaseFragment<FragmentSearchBinding>() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        (requireActivity() as AppCompatActivity).supportActionBar?.hide()
-    }
-
-    override fun onStop() {
-        (requireActivity() as AppCompatActivity).supportActionBar?.show()
-        super.onStop()
-    }
-
     private fun navigateToForecastList(cityName: String) {
         val bundle = Bundle()
         bundle.putString(PARAMS_CITY_NAME, cityName)
