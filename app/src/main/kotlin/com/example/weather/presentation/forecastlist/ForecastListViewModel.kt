@@ -1,20 +1,20 @@
 package com.example.weather.presentation.forecastlist
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.weather.domain.ForecastSearchParams
 import com.example.weather.domain.ForecastSearchResult
 import com.example.weather.domain.ForecastSearchUseCase
+import com.example.weather.presentation.forecastlist.ForecastListFragment.Companion.PARAMS_CITY_NAME
 import com.hadilq.liveevent.LiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class ForecastListViewModel @Inject constructor(private val forecastSearchUseCase: ForecastSearchUseCase) :
-    ViewModel() {
+internal class ForecastListViewModel @Inject constructor(
+    private val forecastSearchUseCase: ForecastSearchUseCase,
+    savedStateHandle: SavedStateHandle
+) : ViewModel(), LifecycleObserver {
 
     internal val forecasts: LiveData<List<ForecastListItem>>
         get() = _forecasts
@@ -24,7 +24,9 @@ internal class ForecastListViewModel @Inject constructor(private val forecastSea
         get() = _error
     private val _error: LiveEvent<String> = LiveEvent()
 
-    fun fetchForecast(cityName: String) {
+    private val cityName: String = savedStateHandle.get<String>(PARAMS_CITY_NAME) ?: ""
+
+    fun fetchForecast() {
         viewModelScope.launch {
             when (val response = forecastSearchUseCase.execute(ForecastSearchParams(cityName))) {
                 is ForecastSearchResult.Success -> {
@@ -42,4 +44,10 @@ internal class ForecastListViewModel @Inject constructor(private val forecastSea
             }
         }
     }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    fun onStart() {
+        fetchForecast()
+    }
+
 }

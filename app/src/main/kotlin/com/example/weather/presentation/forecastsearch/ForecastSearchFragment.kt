@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.example.weather.databinding.FragmentSearchBinding
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.example.weather.base.BaseFragment
 import com.example.weather.R
@@ -21,30 +21,29 @@ internal class ForecastSearchFragment : BaseFragment<FragmentSearchBinding>() {
         private const val PARAMS_CITY_NAME = "params_city_name"
     }
 
+    private val viewModel: ForecastSearchViewModel by viewModels()
+
     override fun bindView(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentSearchBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.success.observe(viewLifecycleOwner, {
+            hideKeyboard()
+            navigateToForecastList(it)
+            binding.etSearch.text = null
+        })
+
+        viewModel.error.observe(viewLifecycleOwner, {
+            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+        })
+
         with(binding) {
             etSearch.requestFocus()
 
             btnLookup.setOnClickListener {
-                val cityName = etSearch.text.toString()
-
-                if (cityName.isEmpty()) {
-                    Toast.makeText(requireContext(), R.string.search_city_name_empty, Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-
-                (requireActivity() as AppCompatActivity).supportActionBar?.title = cityName
-
-                hideKeyboard()
-
-                navigateToForecastList(cityName)
-
-                etSearch.text = null
+                viewModel.validateCityName(etSearch.text.toString())
             }
         }
     }

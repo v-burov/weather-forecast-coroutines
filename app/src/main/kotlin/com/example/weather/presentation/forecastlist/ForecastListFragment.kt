@@ -20,7 +20,7 @@ import java.lang.IllegalStateException
 internal class ForecastListFragment : BaseFragment<FragmentForecastListBinding>() {
 
     companion object {
-        private const val PARAMS_CITY_NAME = "params_city_name"
+        internal const val PARAMS_CITY_NAME = "params_city_name"
         private const val PARAMS_DATE = "params_date"
     }
 
@@ -32,6 +32,11 @@ internal class ForecastListFragment : BaseFragment<FragmentForecastListBinding>(
 
     override fun bindView(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentForecastListBinding.inflate(inflater, container, false)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        lifecycle.addObserver(viewModel)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -63,10 +68,8 @@ internal class ForecastListFragment : BaseFragment<FragmentForecastListBinding>(
                 setupActionBarWithNavController(NavHostFragment.findNavController(this@ForecastListFragment))
             }
 
-            viewModel.fetchForecast(cityName)
-
             swiperefresh.setOnRefreshListener {
-                viewModel.fetchForecast(cityName)
+                viewModel.fetchForecast()
             }
         }
     }
