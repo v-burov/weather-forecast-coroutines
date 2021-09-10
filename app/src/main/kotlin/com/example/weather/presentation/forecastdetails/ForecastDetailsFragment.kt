@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.weather.R
 import com.example.weather.base.BaseFragment
@@ -15,11 +16,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 internal class ForecastDetailsFragment : BaseFragment<FragmentForecastDetailsBinding>() {
-
-    companion object {
-        private const val PARAMS_CITY_NAME = "params_city_name"
-        private const val PARAMS_DATE = "params_date"
-    }
 
     private val viewModel: ForecastDetailsViewModel by viewModels()
 
@@ -41,8 +37,8 @@ internal class ForecastDetailsFragment : BaseFragment<FragmentForecastDetailsBin
             }
         })
 
-        val date = requireArguments().getLong(PARAMS_DATE)
-        val cityName = requireArguments().getString(PARAMS_CITY_NAME)
+        val args by navArgs<ForecastDetailsFragmentArgs>()
+        val cityName = args.cityName
 
         with(requireActivity() as AppCompatActivity) {
             setSupportActionBar(binding.toolbar)
@@ -50,6 +46,6 @@ internal class ForecastDetailsFragment : BaseFragment<FragmentForecastDetailsBin
             setupActionBarWithNavController(NavHostFragment.findNavController(this@ForecastDetailsFragment))
         }
 
-        viewModel.loadData(date)
+        viewModel.loadData()
     }
 }

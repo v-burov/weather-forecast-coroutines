@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import com.example.weather.databinding.FragmentSearchBinding
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
@@ -16,10 +17,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 internal class ForecastSearchFragment : BaseFragment<FragmentSearchBinding>() {
-
-    companion object {
-        private const val PARAMS_CITY_NAME = "params_city_name"
-    }
 
     private val viewModel: ForecastSearchViewModel by viewModels()
 
@@ -49,10 +46,8 @@ internal class ForecastSearchFragment : BaseFragment<FragmentSearchBinding>() {
     }
 
     private fun navigateToForecastList(cityName: String) {
-        val bundle = Bundle()
-        bundle.putString(PARAMS_CITY_NAME, cityName)
         NavHostFragment.findNavController(this)
-            .navigate(R.id.action_searchFragment_to_forecastListFragment, bundle)
+            .navigate(R.id.action_searchFragment_to_forecastListFragment, bundleOf("cityName" to cityName))
     }
 
     private fun hideKeyboard() {

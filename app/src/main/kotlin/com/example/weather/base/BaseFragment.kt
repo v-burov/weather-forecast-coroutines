@@ -28,4 +28,14 @@ abstract class BaseFragment<B : ViewBinding> : Fragment() {
         _binding = null
         super.onDestroyView()
     }
+
+    override fun setArguments(args: Bundle?) {
+        if (args != null) {
+            super.setArguments(Bundle(args).apply {
+                putBundle(BUNDLE_ARGS, args) // Wrap the arguments as BUNDLE_ARGS
+            })
+        } else {
+            super.setArguments(null)
+        }
+    }
 }

@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weather.base.BaseFragment
@@ -18,11 +20,6 @@ import java.lang.IllegalStateException
 
 @AndroidEntryPoint
 internal class ForecastListFragment : BaseFragment<FragmentForecastListBinding>() {
-
-    companion object {
-        internal const val PARAMS_CITY_NAME = "params_city_name"
-        private const val PARAMS_DATE = "params_date"
-    }
 
     private lateinit var cityName: String
 
@@ -59,8 +56,8 @@ internal class ForecastListFragment : BaseFragment<FragmentForecastListBinding>(
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             })
 
-            cityName = requireArguments().getString(PARAMS_CITY_NAME)
-                ?: throw IllegalStateException("City name cannot be empty")
+            val args by navArgs<ForecastListFragmentArgs>()
+            cityName = args.cityName
 
             with(requireActivity() as AppCompatActivity) {
                 setSupportActionBar(toolbar)
@@ -75,11 +72,10 @@ internal class ForecastListFragment : BaseFragment<FragmentForecastListBinding>(
     }
 
     private fun onItemClicked(date: Long) {
-        val bundle = Bundle()
-        bundle.putLong(PARAMS_DATE, date)
-        bundle.putString(PARAMS_CITY_NAME, cityName)
-
         NavHostFragment.findNavController(this)
-            .navigate(R.id.action_forecastListFragment_to_forecastDetailsFragment, bundle)
+            .navigate(
+                R.id.action_forecastListFragment_to_forecastDetailsFragment,
+                bundleOf("cityName" to cityName, "date" to date)
+            )
     }
 }

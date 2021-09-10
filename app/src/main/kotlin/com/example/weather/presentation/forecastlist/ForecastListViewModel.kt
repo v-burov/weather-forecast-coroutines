@@ -1,10 +1,10 @@
 package com.example.weather.presentation.forecastlist
 
 import androidx.lifecycle.*
+import com.example.weather.base.BaseViewModel
 import com.example.weather.domain.ForecastSearchParams
 import com.example.weather.domain.ForecastSearchResult
 import com.example.weather.domain.ForecastSearchUseCase
-import com.example.weather.presentation.forecastlist.ForecastListFragment.Companion.PARAMS_CITY_NAME
 import com.hadilq.liveevent.LiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -14,7 +14,7 @@ import javax.inject.Inject
 internal class ForecastListViewModel @Inject constructor(
     private val forecastSearchUseCase: ForecastSearchUseCase,
     savedStateHandle: SavedStateHandle
-) : ViewModel(), LifecycleObserver {
+) : BaseViewModel(savedStateHandle) {
 
     internal val forecasts: LiveData<List<ForecastListItem>>
         get() = _forecasts
@@ -24,7 +24,8 @@ internal class ForecastListViewModel @Inject constructor(
         get() = _error
     private val _error: LiveEvent<String> = LiveEvent()
 
-    private val cityName: String = savedStateHandle.get<String>(PARAMS_CITY_NAME) ?: ""
+    private val args by navArgs<ForecastListFragmentArgs>()
+    private val cityName: String = args.cityName
 
     fun fetchForecast() {
         viewModelScope.launch {
@@ -49,5 +50,4 @@ internal class ForecastListViewModel @Inject constructor(
     fun onStart() {
         fetchForecast()
     }
-
 }

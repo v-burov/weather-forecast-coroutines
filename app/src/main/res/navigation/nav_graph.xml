@@ -21,10 +21,20 @@
         <action
             android:id="@+id/action_forecastListFragment_to_forecastDetailsFragment"
             app:destination="@id/forecastDetailsFragment" />
+        <argument
+            android:name="cityName"
+            app:argType="string" />
     </fragment>
 
     <fragment
         android:id="@+id/forecastDetailsFragment"
         android:name="com.example.weather.presentation.forecastdetails.ForecastDetailsFragment"
-        tools:layout="@layout/fragment_forecast_details" />
+        tools:layout="@layout/fragment_forecast_details" >
+        <argument
+            android:name="cityName"
+            app:argType="string" />
+        <argument
+            android:name="date"
+            app:argType="long" />
+    </fragment>
 </navigation>
