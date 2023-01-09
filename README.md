@@ -1,6 +1,6 @@
 # Weather forecast (MVVM-Coroutines)
 
-A simple application that provides the weather forecast.
+A simple application that provides a weather forecast.
 
 - The app displays the user an input field.
 - The user enters a city name and presses lookup.
@@ -30,3 +30,4 @@ Retrofit, Dagger Hilt, Coroutines.
 5. Add search by postal code.
 6. Improve UI design. Add date to each forecast to have an understanding for
    which day the forecast is shown.
+7. Add unit tests.
