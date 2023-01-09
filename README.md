@@ -2,7 +2,7 @@
 
 The goal of this project is to show how to implement Clean architecture using MVVM for presentation layer and kotlin coroutines for background tasks.
 
-![](https://github.com/v-burov/weather-forecast/blob/main/forecat_coroutines.gif)
+![](https://github.com/v-burov/weather-forecast/blob/main/forecast_coroutines.gif)
 
 # Stack: 
 Android Architecture Components (ViewModel, LiveData, Navigation, Lifecycle), Retrofit, Dagger Hilt, Coroutines.
